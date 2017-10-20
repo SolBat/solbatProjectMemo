@@ -7,11 +7,12 @@
 //
 
 import Foundation
+import UIKit
 
-class MemoData {
+class MemoData  {
     var idx: Int?
     var title: String?
     var contents: String?
-   // var image: UIImage?
+    var image: UIImage?
     var regdate: Date?
 }

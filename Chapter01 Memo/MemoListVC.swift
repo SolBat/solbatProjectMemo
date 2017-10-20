@@ -10,42 +10,50 @@ import UIKit
 
 class MemoListVC: UITableViewController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
-
+    // 이 메소드는 테이블 뷰의 셀의 개수를 결정하는 메소드입니다.
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        let count = self.appDelegate.memoList.count
+        
+        return count
     }
 
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
+        
+        // 1. memoList 데이터에서 주어진 행에 맞는 데이터를 꺼낸다.
+        let row = self.appDelegate.memoList[indexPath.row]
+        
+        // 2. 이미지 속성이 비었을 경우 MemoCell 아니면 memoCellWithImage
+        let cellId = row.image == nil ? "MemoCell" : "MemoCellWithImage"
+        
+        // 3. 재사용 큐로부터 프로토타입 셀의 인스턴스를 전달 받는다.
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MemoCell
+        
+        // 4. 내용 구성
+        cell.subject?.text = row.title
+        cell.contents?.text = row.contents
+        cell.img?.image = row.image
+        
+        // 5. Date 타입의 날짜 포맷변경
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-mm-dd HH:mm:ss"
+        
+        cell.regdate?.text = formatter.string(from: row.regdate!)
 
         return cell
     }
-    */
+    
+    // 스크린에 뷰 컨트롤러가 나타날 때마다 호출되는 메소드
+    override func viewWillAppear(_ animated: Bool) {
+        // 테이블 데이터를 다시 읽어들인다. 이에 따라 행을 구성하는 로직이 다시 실행 될 것이다.
+        self.tableView.reloadData()
+        
+        
+    }
+ 
 
     /*
     // Override to support conditional editing of the table view.

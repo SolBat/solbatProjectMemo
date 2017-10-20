@@ -17,6 +17,32 @@ class MemoRegisterVC: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var preview: UIImageView!
     
     @IBAction func save(_ sender: UIBarButtonItem) {
+        
+        guard self.contents.text?.isEmpty == false else {
+            // 내용을 입력하지 않았을 경우
+            let alert = UIAlertController(title: nil, message: "내용을 입력해주세요.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        
+        // 정상 실행 구문
+        let data = MemoData()
+        
+        data.title = self.subject
+        data.contents = self.contents.text
+        data.image = self.preview.image
+        data.regdate = Date()
+        
+        // 앱 델리게이트 객체를 읽어온 다음 memoList 배열에 Memodata 객체를 추가한다.
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.memoList.append(data)
+        
+        // 작성품 화면을 종료하고 이전화면으로 되돌아간다.
+        _ = self.navigationController?.popViewController(animated: true)
+        
+        
+        
     }
     
     @IBAction func pick(_ sender: UIBarButtonItem) {
@@ -25,7 +51,7 @@ class MemoRegisterVC: UIViewController, UIImagePickerControllerDelegate, UINavig
         picker.allowsEditing = true
         
         self.present(picker, animated: false, completion: nil)
-        
+           
     }
     
     // 이미지 선택했을때 호출되는 메소드
@@ -39,9 +65,9 @@ class MemoRegisterVC: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        let contents = textView.text as NSString
-        let length = ( (contents.length > 15) ? 15 : contents.length )
-        self.subject = contents.substring(with: NSRange(location: 0, length: length))
+        let content = textView.text as NSString
+        let length = ( (content.length > 15) ? 15 : content.length )
+        self.subject = content.substring(with: NSRange(location: 0, length: length))
         
         //네비게이션 타이틀에 표시한다.
         self.navigationItem.title = subject
