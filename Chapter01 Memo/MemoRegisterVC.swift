@@ -28,12 +28,12 @@ class MemoRegisterVC: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         // 정상 실행 구문
         let data = MemoData()
-        
+        print(self.subject)
         data.title = self.subject
         data.contents = self.contents.text
         data.image = self.preview.image
         data.regdate = Date()
-        
+        print(data);
         // 앱 델리게이트 객체를 읽어온 다음 memoList 배열에 Memodata 객체를 추가한다.
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.memoList.append(data)

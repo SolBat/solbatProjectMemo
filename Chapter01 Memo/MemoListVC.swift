@@ -30,7 +30,7 @@ class MemoListVC: UITableViewController {
         let cellId = row.image == nil ? "MemoCell" : "MemoCellWithImage"
         
         // 3. 재사용 큐로부터 프로토타입 셀의 인스턴스를 전달 받는다.
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MemoCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId) as! MemoCell
         
         // 4. 내용 구성
         cell.subject?.text = row.title
@@ -45,6 +45,24 @@ class MemoListVC: UITableViewController {
 
         return cell
     }
+    
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        // 1. moemoList 배열에서 선택된 행에 맞는 데이터를 꺼낸다.
+        let row = self.appDelegate.memoList[indexPath.row]
+        
+        // 2. 상세화면의 인스턴스를 생성한다.
+        guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "MemoRead") as? MemoDetailViewVC else {
+            return
+        }
+        
+        vc.param = row
+        self.navigationController?.pushViewController(vc, animated: true)
+        
+    }
+    
+    
     
     // 스크린에 뷰 컨트롤러가 나타날 때마다 호출되는 메소드
     override func viewWillAppear(_ animated: Bool) {
